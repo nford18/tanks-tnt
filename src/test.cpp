@@ -14,7 +14,7 @@ int main(int argc, char** argv){
 	}
 	Scene scene;
 	Engine* engine = Engine::getInstance();
-	PhysicsWorld physics(b2Vec2(0.0, -10.0f));
+	PhysicsWorld physics(b2Vec2(0.0, 0.0f));
 
 	b2BodyDef groundDef;
 	groundDef.position.Set(0.0f, -7.6f);

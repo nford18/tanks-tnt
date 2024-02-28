@@ -7,18 +7,28 @@
 #include <box2d/box2d.h>
 #include <random>
 
+bool wDown;
+bool aDown;
+bool sDown;
+bool dDown;
+
 Player::Player(PhysicsWorld* physics){
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<int> distribution(0, 10);
+	wDown = false;
+	aDown = false;
+	sDown = false;
+	dDown = false;
+	
 
 	// Generate a random number between 0 and RAND_MAX
 	loadImage("./assets/tank_base.png");
 	// Need a body definition before we can make a body
 	bodyDef = new b2BodyDef();
 	bodyDef->type = b2_dynamicBody;
-	bodyDef->position.Set(distribution(gen) + distribution(gen) / 10.0f, - distribution(gen));
+	bodyDef->position.Set(5.0f, -5.0f);
 	// Physics engine makes the body for us and returns a pointer to it
 	body = physics->addBody(bodyDef);
 	// Need a shape
@@ -47,18 +57,57 @@ b2BodyDef* Player::getBodyDef(){
 }
 
 void Player::update(double delta){
+	float x_vel, y_vel;
 	//std::cout << body->GetPosition().x << ", " << body->GetPosition().y << std::endl;
 	auto events = Engine::getEvents();
 	for(auto event=events.begin(); event!=events.end(); ++event){
 		if(event->type == SDL_KEYDOWN){
-			if(event->key.keysym.sym == SDLK_SPACE){
-				b2Vec2 up(0.0f, 1.0f);
-				b2Vec2 pos = body->GetPosition();
-				pos.x += 0.1;
-				body->ApplyLinearImpulse(up, pos, true);
-				body->ApplyTorque(10.0f, true);
+			wDown = event->key.keysym.sym == SDLK_w;
+			aDown = event->key.keysym.sym == SDLK_a;
+			sDown = event->key.keysym.sym == SDLK_s;
+			dDown = event->key.keysym.sym == SDLK_d;
+		}
+		if(event->type == SDL_KEYUP){
+			if(event->key.keysym.sym == SDLK_w){
+				wDown = false;
+			}
+			if(event->key.keysym.sym == SDLK_a){
+				aDown = false;
+			}
+			if(event->key.keysym.sym == SDLK_s){
+				sDown = false;
+			}
+			if(event->key.keysym.sym == SDLK_d){
+				dDown = false;
 			}
 		}
+		// update velocity
+		if(wDown){
+			y_vel = -0.5;
+		}else{
+			y_vel = 0.0;
+		}
+
+		if(aDown){
+			x_vel = -0.5;
+		}else{
+			x_vel = 0.0;
+		}
+
+		if(sDown){
+			y_vel = 0.5;
+		}else{
+			y_vel = 0.0;
+		}
+
+		if(dDown){
+			x_vel = 0.5;
+		}else{
+			x_vel = 0.0;
+		}
+
+		x = x + (x_vel * 100) * delta;
+		y = y + (y_vel * 100) * delta;
 	}	
 }
 
