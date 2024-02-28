@@ -6,6 +6,7 @@
 #include "LEAGUE/engine.h"
 #include "LEAGUE/physics.h"
 #include "player.h"
+#include "background.h"
 
 int main(int argc, char** argv){
 	int opt;
@@ -16,14 +17,21 @@ int main(int argc, char** argv){
 	Engine* engine = Engine::getInstance();
 	PhysicsWorld physics(b2Vec2(0.0, 0.0f));
 
-	b2BodyDef groundDef;
-	groundDef.position.Set(0.0f, -7.6f);
-	groundDef.type=b2_staticBody;
-	b2Body* ground = physics.addBody(&groundDef);
-	b2PolygonShape groundBox;
-	groundBox.SetAsBox(50.0f, 1.0f);
-	ground->CreateFixture(&groundBox, 1.0f);
+	b2BodyDef bottomDef;
+	bottomDef.position.Set(0.0f, -7.6f);
+	bottomDef.type=b2_staticBody;
+	b2Body* bottom = physics.addBody(&bottomDef);
+	b2PolygonShape bottomBox;
+	bottomBox.SetAsBox(50.0f, 1.0f);
+	bottom->CreateFixture(&bottomBox, 1.0f);
 
+	b2BodyDef topDef;
+	topDef.position.Set(0.0f, -1.0f);
+	topDef.type=b2_staticBody;
+	b2Body* top = physics.addBody(&topDef);
+	b2PolygonShape topBox;
+	topBox.SetAsBox(50.0f, 1.0f);
+	top->CreateFixture(&topBox, 1.0f);
 
 	b2BodyDef leftDef;
 	leftDef.position.Set(0.0f, -7.6f);
@@ -41,10 +49,13 @@ int main(int argc, char** argv){
 	rightBox.SetAsBox(1.0f, 50.0f);
 	right->CreateFixture(&rightBox, 1.0f);
 
+	// Background* b = new Background();
+	// scene.addDrawable(*b);
 	
 	Player* p = new Player(&physics);
 	scene.addUpdateable(*p);
 	scene.addDrawable(*p);
+
 	
 
 	scene.addUpdateable(physics);

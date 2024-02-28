@@ -1,5 +1,5 @@
 #include "mathfu/vector.h"
-#include "player.h"
+#include "enemy.h"
 #include "LEAGUE/physics.h"
 #include "LEAGUE/engine.h"
 #include <iostream>
@@ -7,28 +7,30 @@
 #include <box2d/box2d.h>
 #include <random>
 
-bool wDown;
-bool aDown;
-bool sDown;
-bool dDown;
-
-Player::Player(PhysicsWorld* physics){
-
-	std::random_device rd;
+Enemy::Enemy(PhysicsWorld* physics, Player* player){
+    std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<int> distribution(0, 10);
-	wDown = false;
-	aDown = false;
-	sDown = false;
-	dDown = false;
-	
+    std::uniform_int_distribution<int> wall(0, 3);
 
 	// Generate a random number between 0 and RAND_MAX
-	loadImage("./assets/tank_base.png");
+	loadImage("./assets/enemy_projectile.png");
 	// Need a body definition before we can make a body
 	bodyDef = new b2BodyDef();
 	bodyDef->type = b2_dynamicBody;
-	bodyDef->position.Set(5.0f, -5.0f);
+    // pick the wall
+    int wallNumber = wall(gen);
+    switch(wallNumber){
+        case 0:
+            bodyDef->position.Set(distribution(gen) , -1);
+        case 1:
+            bodyDef->position.Set(1, - distribution(gen));
+        case 2:
+            bodyDef->position.Set(distribution(gen) , -8);
+        case 3:
+            bodyDef->position.Set(8, - distribution(gen));
+    } 
+	bodyDef->position.Set(distribution(gen) , - distribution(gen));
 	// Physics engine makes the body for us and returns a pointer to it
 	body = physics->addBody(bodyDef);
 	// Need a shape
