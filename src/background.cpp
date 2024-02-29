@@ -6,7 +6,7 @@ Background::Background(){
 	y = 0;
 	x_vel = 0;
 	y_vel = 0;
-	loadImage("./assets/tileable_old_school_video_game_grass.jpg");
+	loadImage("./assets/back_grass.jpg");
 }
 
 Background::~Background(){

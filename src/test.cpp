@@ -6,6 +6,7 @@
 #include "LEAGUE/engine.h"
 #include "LEAGUE/physics.h"
 #include "player.h"
+#include "enemy.h"
 #include "background.h"
 
 int main(int argc, char** argv){
@@ -49,12 +50,16 @@ int main(int argc, char** argv){
 	rightBox.SetAsBox(1.0f, 50.0f);
 	right->CreateFixture(&rightBox, 1.0f);
 
-	// Background* b = new Background();
-	// scene.addDrawable(*b);
+	//Background* b = new Background();
+	//scene.addDrawable(*b);
 	
 	Player* p = new Player(&physics);
 	scene.addUpdateable(*p);
 	scene.addDrawable(*p);
+	
+	Enemy* e = new Enemy(&physics, p);
+	scene.addUpdateable(*e);
+	scene.addDrawable(*e);
 
 	
 

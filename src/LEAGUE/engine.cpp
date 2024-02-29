@@ -87,7 +87,6 @@ bool Engine::setup(){
 
 	L = luaL_newstate();
 	luaL_openlibs(L);
-
 	return true;
 }
 

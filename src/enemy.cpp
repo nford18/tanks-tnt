@@ -9,6 +9,7 @@
 #include <random>
 
 Enemy::Enemy(PhysicsWorld* physics, Player* player){
+	this->player = player;
     std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<int> distribution(0, 10);
@@ -64,10 +65,11 @@ void Enemy::update(double delta){
 	auto events = Engine::getEvents();
 	for(auto event=events.begin(); event!=events.end(); ++event){
 		//Find the position of the player
-		
+		b2Vec2 target = this->player->getBody()->GetPosition();
 		//Find a vector from our projectile to the player 
-		
-		//Apply a force to the player
+		b2Vec2 path = target - body->GetPosition();
+		//Apply a force to get the projectile there
+		body->ApplyForceToCenter(path, true);
 	}	
 }
 
