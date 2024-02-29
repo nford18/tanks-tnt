@@ -1,5 +1,6 @@
 #include "mathfu/vector.h"
 #include "enemy.h"
+#include "player.h"
 #include "LEAGUE/physics.h"
 #include "LEAGUE/engine.h"
 #include <iostream>
@@ -30,7 +31,7 @@ Enemy::Enemy(PhysicsWorld* physics, Player* player){
         case 3:
             bodyDef->position.Set(8, - distribution(gen));
     } 
-	bodyDef->position.Set(distribution(gen) , - distribution(gen));
+	//bodyDef->position.Set(distribution(gen) , - distribution(gen));
 	// Physics engine makes the body for us and returns a pointer to it
 	body = physics->addBody(bodyDef);
 	// Need a shape
@@ -46,69 +47,31 @@ Enemy::Enemy(PhysicsWorld* physics, Player* player){
 	body->CreateFixture(&ballFixture);
 }
 
-Player::~Player(){
+Enemy::~Enemy(){
 	delete bodyDef;
 }
 
-void Player::setBody(b2Body* body){
+void Enemy::setBody(b2Body* body){
 	this->body = body;
 }
 
-b2BodyDef* Player::getBodyDef(){
+b2BodyDef* Enemy::getBodyDef(){
 	return bodyDef;
 }
 
-void Player::update(double delta){
+void Enemy::update(double delta){
 	//std::cout << body->GetPosition().x << ", " << body->GetPosition().y << std::endl;
 	auto events = Engine::getEvents();
 	for(auto event=events.begin(); event!=events.end(); ++event){
-		if(event->key.state == SDL_PRESSED){
-			wDown = event->key.keysym.sym == SDLK_w;
-			aDown = event->key.keysym.sym == SDLK_a;
-			sDown = event->key.keysym.sym == SDLK_s;
-			dDown = event->key.keysym.sym == SDLK_d;
-		}
-		if(event->key.state == SDL_RELEASED){
-			if(event->key.keysym.sym == SDLK_w){
-				wDown = false;
-			}
-			if(event->key.keysym.sym == SDLK_a){
-				aDown = false;
-			}
-			if(event->key.keysym.sym == SDLK_s){
-				sDown = false;
-			}
-			if(event->key.keysym.sym == SDLK_d){
-				dDown = false;
-			}
-		}
-		// update velocity
-		std::cout << wDown << ", " << aDown << ", " << sDown << ", " << dDown << std::endl;
-		b2Vec2 force;
+		//Find the position of the player
 		
-		if(wDown){
-			force = b2Vec2(0.0f, 0.01f);
-		}else if(aDown){
-			force = b2Vec2(-0.01f, 0.0f);
-		}else if(sDown){
-			force = b2Vec2(0.0f, -0.01f);
-		}else if(dDown){
-			force = b2Vec2(0.01f, 0.0f);
-		}else{
-			force = b2Vec2(0.0f, 0.0f);
-			body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-		}
+		//Find a vector from our projectile to the player 
 		
-		
-		// b2Vec2 pos = body->GetPosition();
-		// pos.x += 0.1;
-		body->ApplyLinearImpulseToCenter(force, true);
-		body->SetAngularVelocity(0.0f);
-
+		//Apply a force to the player
 	}	
 }
 
-void Player::draw(SDL_Renderer* renderer){
+void Enemy::draw(SDL_Renderer* renderer){
 	SDL_Rect dest;
 	b2Vec2 pos = body->GetPosition();
 	dest.x = pos.x * 100;
@@ -123,6 +86,6 @@ void Player::draw(SDL_Renderer* renderer){
 	}
 }
 
-b2Body* Player::getBody(){
+b2Body* Enemy::getBody(){
 	return body;
 }

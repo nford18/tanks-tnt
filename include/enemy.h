@@ -4,6 +4,7 @@
 #include "LEAGUE/common_data_structures.h"
 #include "LEAGUE/physics.h"
 #include <box2d/box2d.h>
+#include "player.h"
 
 class Enemy : public Drawable, public Updateable {
 	public:
