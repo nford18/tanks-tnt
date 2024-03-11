@@ -33,13 +33,13 @@ Player::Player(PhysicsWorld* physics){
 	body = physics->addBody(bodyDef);
 	// Need a shape
 	b2CircleShape ballShape;
-	ballShape.m_radius=0.16f;
+	ballShape.m_radius=0.08f;
 	// Must apply a fixture.  Fixes shape and other properties to it.
 	b2FixtureDef ballFixture;
 	ballFixture.shape = &ballShape;
 	ballFixture.density = 1.0f;
-	ballFixture.friction = 0.3f;
-	ballFixture.restitution = 0.3f;
+	ballFixture.friction = 0.25f;
+	ballFixture.restitution = 0.0f;
 	// Make the fixture.
 	body->CreateFixture(&ballFixture);
 }
@@ -81,7 +81,7 @@ void Player::update(double delta){
 			}
 		}
 		// update velocity
-		std::cout << wDown << ", " << aDown << ", " << sDown << ", " << dDown << std::endl;
+		// std::cout << wDown << ", " << aDown << ", " << sDown << ", " << dDown << std::endl;
 		b2Vec2 force;
 		
 		if(wDown){

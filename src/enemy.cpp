@@ -12,8 +12,9 @@ Enemy::Enemy(PhysicsWorld* physics, Player* player){
 	this->player = player;
     	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> distribution(0, 10);
-    	std::uniform_int_distribution<int> wall(0, 3);
+	std::uniform_int_distribution<int> LR_distribution(0, 6);
+	std::uniform_int_distribution<int> UD_distribution(1, 9);
+    std::uniform_int_distribution<int> wall(0, 3);
 
 	// Generate a random number between 0 and RAND_MAX
 	loadImage("./assets/enemy_projectile.png");
@@ -23,14 +24,14 @@ Enemy::Enemy(PhysicsWorld* physics, Player* player){
     	// pick the wall
     	int wallNumber = wall(gen);
    	switch(wallNumber){
-        case 0:
-            bodyDef->position.Set(distribution(gen) , -1);
-        case 1:
-            bodyDef->position.Set(1, - distribution(gen));
-        case 2:
-            bodyDef->position.Set(distribution(gen) , -8);
-        case 3:
-            bodyDef->position.Set(8, - distribution(gen));
+        case 0: // top
+            bodyDef->position.Set(UD_distribution(gen) , -1.5f);
+        case 1: // left
+            bodyDef->position.Set(1.5f, - LR_distribution(gen) - 0.8);
+        case 2: // bottom
+            bodyDef->position.Set(UD_distribution(gen) , -7.1f);
+        case 3: // right
+            bodyDef->position.Set(9.5f, - LR_distribution(gen) - 0.8);
     	} 
 	//bodyDef->position.Set(distribution(gen) , - distribution(gen));
 	// Physics engine makes the body for us and returns a pointer to it
@@ -69,6 +70,8 @@ void Enemy::update(double delta){
 		//Find a vector from our projectile to the player 
 		b2Vec2 path = target - body->GetPosition();
 		//Apply a force to get the projectile there
+		path.Normalize();
+		path *= 1.0f;
 		body->ApplyForceToCenter(path, true);
 	}	
 }

@@ -51,8 +51,8 @@ int main(int argc, char** argv){
 	rightBox.SetAsBox(1.0f, 50.0f);
 	right->CreateFixture(&rightBox, 1.0f);
 
-	//Background* b = new Background();
-	//scene.addDrawable(*b);
+	Background* b = new Background();
+	scene.addDrawable(*b);
 	
 	Player* p = new Player(&physics);
 	scene.addUpdateable(*p);

@@ -2,11 +2,11 @@
 #include "LEAGUE/engine.h"
 
 Background::Background(){
-	x = 0;
-	y = 0;
+	x = 1;
+	y = 1;
 	x_vel = 0;
 	y_vel = 0;
-	loadImage("./assets/back_grass.jpg");
+	loadImage("./assets/background_plain4.png");
 }
 
 Background::~Background(){

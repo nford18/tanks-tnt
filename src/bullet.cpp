@@ -56,6 +56,8 @@ void Bullet::update(double delta){
 			//Find a vector from our projectile to the player 
 			b2Vec2 path = target - body->GetPosition();
 			//Apply a force to get the projectile there
+			path.Normalize();
+			path *= 5.0f;
 			body->ApplyForceToCenter(path, true);
 		}
 	}	
