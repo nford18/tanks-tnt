@@ -10,19 +10,19 @@
 
 Enemy::Enemy(PhysicsWorld* physics, Player* player){
 	this->player = player;
-    std::random_device rd;
+    	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<int> distribution(0, 10);
-    std::uniform_int_distribution<int> wall(0, 3);
+    	std::uniform_int_distribution<int> wall(0, 3);
 
 	// Generate a random number between 0 and RAND_MAX
 	loadImage("./assets/enemy_projectile.png");
 	// Need a body definition before we can make a body
 	bodyDef = new b2BodyDef();
 	bodyDef->type = b2_dynamicBody;
-    // pick the wall
-    int wallNumber = wall(gen);
-    switch(wallNumber){
+    	// pick the wall
+    	int wallNumber = wall(gen);
+   	switch(wallNumber){
         case 0:
             bodyDef->position.Set(distribution(gen) , -1);
         case 1:
@@ -31,7 +31,7 @@ Enemy::Enemy(PhysicsWorld* physics, Player* player){
             bodyDef->position.Set(distribution(gen) , -8);
         case 3:
             bodyDef->position.Set(8, - distribution(gen));
-    } 
+    	} 
 	//bodyDef->position.Set(distribution(gen) , - distribution(gen));
 	// Physics engine makes the body for us and returns a pointer to it
 	body = physics->addBody(bodyDef);

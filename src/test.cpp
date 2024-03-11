@@ -8,6 +8,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "background.h"
+#include "bullet.h"
 
 int main(int argc, char** argv){
 	int opt;
@@ -61,7 +62,9 @@ int main(int argc, char** argv){
 	scene.addUpdateable(*e);
 	scene.addDrawable(*e);
 
-	
+	Bullet* bu = new Bullet(&physics, p);
+	scene.addUpdateable(*bu);
+	scene.addDrawable(*bu);
 
 	scene.addUpdateable(physics);
 	engine->core_loop(scene);

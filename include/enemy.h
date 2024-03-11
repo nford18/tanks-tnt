@@ -20,7 +20,7 @@ class Enemy : public Drawable, public Updateable {
 		int y_vel;
 		b2Body* body;
 		b2BodyDef* bodyDef;
-		Player * player;
+		Player* player;
 };
 
 #endif
