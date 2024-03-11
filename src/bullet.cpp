@@ -49,16 +49,23 @@ void Bullet::update(double delta){
 	auto events = Engine::getEvents();
 	for(auto event=events.begin(); event!=events.end(); ++event){
 		if(event->button.type == SDL_MOUSEBUTTONDOWN){
-			auto x = this->player->getBody()->GetPosition().x;
-			auto y = this->player->getBody()->GetPosition().y;
-			this->getBody()->SetTransform(b2Vec2(x, y), this->getBody()->GetAngle());
-			b2Vec2 target = b2Vec2(event->button.x, event->button.y);
+			b2Vec2 pos = this->player->getBody()->GetPosition();
+			// auto y = this->player->getBody()->GetPosition().y;
+			b2Vec2 target = b2Vec2(event->button.x/1000.0f, -event->button.y/760.0f);
+			target *= 10.0f;
 			//Find a vector from our projectile to the player 
-			b2Vec2 path = target - body->GetPosition();
+			b2Vec2 path = target - pos;
 			//Apply a force to get the projectile there
 			path.Normalize();
-			path *= 5.0f;
-			body->ApplyForceToCenter(path, true);
+			b2Vec2 offset = path;
+			offset *= 0.3;
+			pos += offset;
+			this->getBody()->SetTransform(pos, this->getBody()->GetAngle());
+
+			// path *= 5.0f;
+			body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+			body->SetAngularVelocity(0.0f);
+			body->ApplyLinearImpulseToCenter(path, true);
 		}
 	}	
 }
