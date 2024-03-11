@@ -13,7 +13,7 @@ bool sDown;
 bool dDown;
 
 Player::Player(PhysicsWorld* physics){
-
+	int numContacts = 0;
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<int> distribution(0, 10);
@@ -42,6 +42,7 @@ Player::Player(PhysicsWorld* physics){
 	ballFixture.restitution = 0.0f;
 	// Make the fixture.
 	body->CreateFixture(&ballFixture);
+	body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 }
 
 Player::~Player(){
@@ -124,3 +125,16 @@ void Player::draw(SDL_Renderer* renderer){
 b2Body* Player::getBody(){
 	return body;
 }
+
+void Player::startContact(){
+	this->numContacts++;
+	if(this->numContacts > 1){
+		loadImage("./assets/tank_base_r.png");
+	} else if(this->numContacts > 0){
+		loadImage("./assets/tank_base_g.png");
+	}
+}
+
+void Player::endContact(){
+}
+

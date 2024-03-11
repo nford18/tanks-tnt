@@ -15,6 +15,9 @@ class Player : public Drawable, public Updateable {
 		void setBody(b2Body*);
 		b2BodyDef* getBodyDef();
 		b2Body* getBody();
+		void startContact();
+		void endContact();
+		int numContacts;
 	private:
 		int x_vel;
 		int y_vel;

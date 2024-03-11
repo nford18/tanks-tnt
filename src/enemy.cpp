@@ -47,6 +47,7 @@ Enemy::Enemy(PhysicsWorld* physics, Player* player){
 	ballFixture.restitution = 0.3f;
 	// Make the fixture.
 	body->CreateFixture(&ballFixture);
+	body->GetUserData().pointer = (uintptr_t)this;
 }
 
 Enemy::~Enemy(){
@@ -93,4 +94,10 @@ void Enemy::draw(SDL_Renderer* renderer){
 
 b2Body* Enemy::getBody(){
 	return body;
+}
+
+void Enemy::startContact(){
+}
+
+void Enemy::endContact(){
 }
