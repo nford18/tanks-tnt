@@ -6,7 +6,7 @@ Background::Background(){
 	y = 1;
 	x_vel = 0;
 	y_vel = 0;
-	loadImage("./assets/background_plain4.png");
+	loadImage("./assets/background_plain.png");
 }
 
 Background::~Background(){
