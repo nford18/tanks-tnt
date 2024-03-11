@@ -1,6 +1,7 @@
 #include "mathfu/vector.h"
 #include "enemy.h"
 #include "player.h"
+#include "userData.h"
 #include "LEAGUE/physics.h"
 #include "LEAGUE/engine.h"
 #include <iostream>
@@ -10,7 +11,7 @@
 
 Enemy::Enemy(PhysicsWorld* physics, Player* player){
 	this->player = player;
-    	std::random_device rd;
+    std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<int> LR_distribution(0, 6);
 	std::uniform_int_distribution<int> UD_distribution(1, 9);
@@ -21,8 +22,8 @@ Enemy::Enemy(PhysicsWorld* physics, Player* player){
 	// Need a body definition before we can make a body
 	bodyDef = new b2BodyDef();
 	bodyDef->type = b2_dynamicBody;
-    	// pick the wall
-    	int wallNumber = wall(gen);
+    // pick the wall
+    int wallNumber = wall(gen);
    	switch(wallNumber){
         case 0: // top
             bodyDef->position.Set(UD_distribution(gen) , -1.5f);
@@ -32,8 +33,9 @@ Enemy::Enemy(PhysicsWorld* physics, Player* player){
             bodyDef->position.Set(UD_distribution(gen) , -7.1f);
         case 3: // right
             bodyDef->position.Set(9.5f, - LR_distribution(gen) - 0.8);
-    	} 
-	//bodyDef->position.Set(distribution(gen) , - distribution(gen));
+    } 
+	
+	// bodyDef->position.Set(-100 , -10);
 	// Physics engine makes the body for us and returns a pointer to it
 	body = physics->addBody(bodyDef);
 	// Need a shape
@@ -47,7 +49,11 @@ Enemy::Enemy(PhysicsWorld* physics, Player* player){
 	ballFixture.restitution = 0.3f;
 	// Make the fixture.
 	body->CreateFixture(&ballFixture);
-	body->GetUserData().pointer = (uintptr_t)this;
+	CustomUserData* data = new CustomUserData();
+	data->obj = this;
+	data->type = 2;
+	body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
+	// respawn();
 }
 
 Enemy::~Enemy(){
@@ -96,8 +102,22 @@ b2Body* Enemy::getBody(){
 	return body;
 }
 
-void Enemy::startContact(){
-}
-
-void Enemy::endContact(){
+void Enemy::respawn(){
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> LR_distribution(0, 6);
+	std::uniform_int_distribution<int> UD_distribution(1, 9);
+    std::uniform_int_distribution<int> wall(0, 3);
+	// pick the wall
+    int wallNumber = wall(gen);
+   	switch(wallNumber){
+        case 0: // top
+            this->getBody()->SetTransform(b2Vec2(UD_distribution(gen) , -1.5f), this->getBody()->GetAngle());
+        case 1: // left
+            this->getBody()->SetTransform(b2Vec2(1.5f, - LR_distribution(gen) - 0.8), this->getBody()->GetAngle());
+        case 2: // bottom
+            this->getBody()->SetTransform(b2Vec2(UD_distribution(gen) , -7.1f), this->getBody()->GetAngle());
+        case 3: // right
+            this->getBody()->SetTransform(b2Vec2(9.5f, - LR_distribution(gen) - 0.8), this->getBody()->GetAngle());
+    } 
 }

@@ -13,6 +13,7 @@ class Bullet : public Drawable, public Updateable {
 		void draw(SDL_Renderer* renderer) override;
 		void update(double delta) override;
 		void setBody(b2Body*);
+		void remove();
 		b2BodyDef* getBodyDef();
 		b2Body* getBody();
 	private:

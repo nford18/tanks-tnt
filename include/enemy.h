@@ -15,8 +15,7 @@ class Enemy : public Drawable, public Updateable {
 		void setBody(b2Body*);
 		b2BodyDef* getBodyDef();
 		b2Body* getBody();
-		void startContact();
-		void endContact();
+		void respawn();
 	private:
 		int x_vel;
 		int y_vel;

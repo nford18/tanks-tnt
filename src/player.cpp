@@ -1,5 +1,6 @@
 #include "mathfu/vector.h"
 #include "player.h"
+#include "userData.h"
 #include "LEAGUE/physics.h"
 #include "LEAGUE/engine.h"
 #include <iostream>
@@ -42,7 +43,10 @@ Player::Player(PhysicsWorld* physics){
 	ballFixture.restitution = 0.0f;
 	// Make the fixture.
 	body->CreateFixture(&ballFixture);
-	body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
+	CustomUserData* data = new CustomUserData();
+	data->obj = this;
+	data->type = 0;
+	body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
 }
 
 Player::~Player(){
@@ -126,7 +130,7 @@ b2Body* Player::getBody(){
 	return body;
 }
 
-void Player::startContact(){
+void Player::damage(){
 	this->numContacts++;
 	if(this->numContacts > 1){
 		loadImage("./assets/tank_base_r.png");
@@ -134,7 +138,3 @@ void Player::startContact(){
 		loadImage("./assets/tank_base_g.png");
 	}
 }
-
-void Player::endContact(){
-}
-

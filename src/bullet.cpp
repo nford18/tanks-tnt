@@ -1,6 +1,7 @@
 #include "mathfu/vector.h"
 #include "bullet.h"
 #include "player.h"
+#include "userData.h"
 #include "LEAGUE/physics.h"
 #include "LEAGUE/engine.h"
 #include <iostream>
@@ -30,6 +31,10 @@ Bullet::Bullet(PhysicsWorld* physics, Player* player){
 	ballFixture.restitution = 0.3f;
 	// Make the fixture.
 	body->CreateFixture(&ballFixture);
+	CustomUserData* data = new CustomUserData();
+	data->obj = this;
+	data->type = 1;
+	body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
 }
 
 Bullet::~Bullet(){
@@ -87,4 +92,10 @@ void Bullet::draw(SDL_Renderer* renderer){
 
 b2Body* Bullet::getBody(){
 	return body;
+}
+
+void Bullet::remove(){
+	body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+	body->SetAngularVelocity(0.0f);
+	body->SetTransform(b2Vec2(-100,0), body->GetAngle());
 }
